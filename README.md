@@ -6,8 +6,7 @@
 - `build`: Runs vite to build the project for production.
 - `lint`: Runs ESLint to lint TypeScript files.
 - `lint:fix`: Runs ESLint with the --fix option to automatically fix linting issues.
-- `format`: Runs Prettier to format TypeScript files.
-- `:format:fix`: Uses Prettier to automatically format all .ts and .tsx files in the src directory.
+- `format:fix`: Uses Prettier to automatically format all .ts and .tsx files in the src directory.
 - `pre-commit`: Checks TypeScript files for formatting and linting issues before committing changes.
 - `preview`: Serves the built app, usually after `build`, to preview before deployment.
 
