@@ -1,38 +1,26 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
+import React from 'react';
+import { AppIState } from './types/Types';
+import SearchPath from './components/SearchPath';
+import ErrorBoundary from './components/ErrorBoundary';
+import SimulatedErrorComponent from './components/SimulatedErrorComponent';
 
-function App() {
-  const [count, setCount] = useState(0);
+class App extends React.Component<object, AppIState> {
+  constructor(props: object) {
+    super(props);
+    this.state = {};
+  }
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button
-          type="button"
-          onClick={() => setCount((currentCount) => currentCount + 1)}
-        >
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  );
+  render() {
+    return (
+      <ErrorBoundary>
+        <div className="wrapper">
+          <h1>Species in Star Wars</h1>
+          <SimulatedErrorComponent />
+          <SearchPath />
+        </div>
+      </ErrorBoundary>
+    );
+  }
 }
 
 export default App;
