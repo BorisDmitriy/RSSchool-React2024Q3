@@ -1,0 +1,93 @@
+body {
+  background-color: #f9f0e1;
+  position: relative;
+  padding: 70px 0 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.species_items {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.species_item {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+
+  border: 1px solid #fc7353;
+  background-color: #f9f0e1;
+  padding: 5px;
+  margin: 5px;
+}
+
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.search-container-control {
+  display: flex;
+  gap: 5px;
+}
+
+.loader-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 5em;
+}
+
+.loader {
+  width: 60px;
+  aspect-ratio: 4;
+  background: radial-gradient(circle closest-side, #000 90%, #0000) 0/calc(100%/3) 100% space;
+  clip-path: inset(0 100% 0 0);
+  animation: l1 1s steps(4) infinite;
+}
+
+.btn {
+  padding: 5px 10px;
+  font: inherit;
+  color: inherit;
+  border: 1px solid #fc7353;
+  background-color: #f9f0e1;
+  transition: background-color 0.2s ease-out;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #fc7353;
+}
+
+.input {
+  border: 1px solid #fc7353;
+  height: 40px;
+
+  padding: 0px 5px;
+  font-size: 20px;
+}
+
+@keyframes l1 {
+  to {
+    clip-path: inset(0 -34% 0 0)
+  }
+}
