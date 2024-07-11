@@ -9,11 +9,16 @@ export default function SpeciesList({ species }: SpeciesListProps) {
       </div>
     );
   }
+  console.log(species);
 
   return (
     <div className="species_items">
-      {species.map((specie) => (
-        <SpecieItem key={specie.name} specie={specie} />
+      {species.map((specieData, index) => (
+        <SpecieItem
+          key={specieData.name}
+          specieData={specieData}
+          id={(index + 1).toString()}
+        />
       ))}
     </div>
   );

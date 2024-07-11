@@ -1,5 +1,6 @@
 import React from 'react';
 import { ErrorBoundaryIState, ErrorBoundaryProps } from '../types/Types';
+import ErrorPage from './ErrorPage';
 
 export default class ErrorBoundary extends React.Component<
   ErrorBoundaryProps,
@@ -23,18 +24,7 @@ export default class ErrorBoundary extends React.Component<
     const { children } = this.props;
 
     if (hasError) {
-      return (
-        <div>
-          <h1>Sorry, something went wrong !</h1>
-          <button
-            className="btn"
-            onClick={() => window.location.reload()}
-            type="button"
-          >
-            Refresh Page
-          </button>
-        </div>
-      );
+      return <ErrorPage />;
     }
 
     return children;

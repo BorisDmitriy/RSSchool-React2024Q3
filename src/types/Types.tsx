@@ -16,7 +16,8 @@ export interface OneSpecie {
   url: string;
 }
 export interface SpecieItemProps {
-  specie: OneSpecie;
+  specieData: OneSpecie;
+  id: string;
 }
 
 export interface SpeciesListProps {
