@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import useLocalStorage from './useLocalStorage';
 import SpeciesList from './SpeciesList';
 import getAllSpeciesAPI from '../api/getAllSpeciesAPI';
 import getSearchedSpeciesAPI from '../api/getSearchedSpeciesAPI';
 import { OneSpecie } from '../types/Types';
-import SpecieCard from './SpecieCard';
+// import SpecieCard from './SpecieCard';
 
 export default function SearchPath() {
   const navigate = useNavigate();
@@ -18,8 +18,8 @@ export default function SearchPath() {
   const [isLoading, setIsLoading] = useState(false);
 
   // add search name from url
-  const searchParamsAlls = new URLSearchParams(location.search);
-  const speiceParamForSpecie = searchParamsAlls.get('speice');
+  // const searchParamsAlls = new URLSearchParams(location.search);
+  // const speiceParamForSpecie = searchParamsAlls.get('speice');
 
   const fetchData = async (searchData?: string) => {
     setIsLoading(true);
@@ -95,7 +95,7 @@ export default function SearchPath() {
       <div className="container">
         <SpeciesList species={results} />
 
-        {speiceParamForSpecie && <SpecieCard />}
+        <Outlet />
       </div>
     </div>
   );

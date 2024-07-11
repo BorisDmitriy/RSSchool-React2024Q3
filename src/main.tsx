@@ -4,12 +4,19 @@ import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import NotFoundPage from './components/NotFoundPage';
+import SpecieCard from './components/SpecieCard';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/specie',
     element: <App />,
     errorElement: <NotFoundPage />,
+    children: [
+      {
+        path: '/specie/:id',
+        element: <SpecieCard />,
+      },
+    ],
   },
 ]);
 

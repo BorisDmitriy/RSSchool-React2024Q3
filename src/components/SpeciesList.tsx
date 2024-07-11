@@ -11,13 +11,20 @@ export default function SpeciesList({ species }: SpeciesListProps) {
   }
   console.log(species);
 
+  const getIdFromUrl = (url: string) => {
+    const parts = url.split('/');
+    const id = parts[parts.length - 2];
+    console.log(id);
+    return id;
+  };
+
   return (
     <div className="species_items">
-      {species.map((specieData, index) => (
+      {species.map((specieData) => (
         <SpecieItem
           key={specieData.name}
           specieData={specieData}
-          id={(index + 1).toString()}
+          id={getIdFromUrl(specieData.url).toString()}
         />
       ))}
     </div>
