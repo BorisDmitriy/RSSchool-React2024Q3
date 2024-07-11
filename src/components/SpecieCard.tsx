@@ -59,7 +59,7 @@ export default function SpecieCard() {
       <p>AverageClifespan: {specieData?.average_lifespan}</p>
       <p>Language: {specieData?.language}</p>
 
-      <Link to={`/specie/${currentSearch}`}>
+      <Link className="no-link-style" to={`/specie/${currentSearch}`}>
         <button type="button" className="btn closeCardBtn">
           Close card
         </button>
