@@ -23,7 +23,7 @@ export interface SpeciesListProps {
   species: OneSpecie[];
 }
 
-export interface ErrResponse {
+export interface ErrResp {
   message: string;
   errors: Error[];
 }

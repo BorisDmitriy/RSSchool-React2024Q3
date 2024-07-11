@@ -1,92 +1,84 @@
-import React from 'react';
-import { SearchPathIState } from '../types/Types';
+import React, { useEffect, useState } from 'react';
 import SpeciesList from './SpeciesList';
-import getSpecies from '../api/Api';
+import getAllSpeciesAPI from '../api/getAllSpeciesAPI';
+import getSearchedSpeciesAPI from '../api/getSearchedSpeciesAPI';
+import useLocalStorage from './useLocalStorage';
+import { OneSpecie } from '../types/Types';
 
-export default class SearchPath extends React.Component<
-  object,
-  SearchPathIState
-> {
-  constructor(props: object) {
-    super(props);
-    this.state = {
-      searchTerm: '',
-      results: [],
-      error: false,
-      isLoading: false,
-    };
-  }
+export default function SearchPath() {
+  const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
+  const [inputData, setInputData] = useState(searchTerm);
+  const [results, setResults] = useState<OneSpecie[]>([]);
+  const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  componentDidMount() {
-    const savedSearchTerm = localStorage.getItem('searchTerm');
-    if (savedSearchTerm) {
-      this.setState({ searchTerm: savedSearchTerm });
-      this.fetchData(savedSearchTerm);
-    } else {
-      this.fetchData();
-    }
-  }
-
-  fetchData = async (searchData?: string) => {
-    this.setState({ isLoading: true });
+  const fetchData = async (searchData?: string) => {
+    setIsLoading(true);
     try {
-      const data = await getSpecies(searchData);
-      if (Array.isArray(data)) {
-        this.setState({ results: data, isLoading: false });
+      let data;
+      if (searchData !== '') {
+        data = await getSearchedSpeciesAPI(searchData);
       } else {
-        this.setState({ error: true, isLoading: false });
+        data = await getAllSpeciesAPI();
       }
-    } catch (error) {
-      this.setState({
-        error: true,
-        isLoading: false,
-      });
+
+      if (Array.isArray(data)) {
+        setResults(data);
+      } else {
+        setError(true);
+      }
+    } catch (fetchError) {
+      setError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchTerm: event.target.value });
+  useEffect(() => {
+    // Fetch all species or searched species based on searchTerm
+    fetchData(searchTerm);
+  }, [searchTerm]);
+
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setInputData(event.target.value);
   };
 
-  handleSearch = () => {
-    const { searchTerm } = this.state;
-    const trimmedSearchTerm = searchTerm.trim();
-    localStorage.setItem('searchTerm', trimmedSearchTerm);
-    this.fetchData(trimmedSearchTerm);
+  const handleSearch = () => {
+    const trimmedInputData = inputData.trim();
+    setSearchTerm(trimmedInputData);
+    fetchData(trimmedInputData);
   };
 
-  render() {
-    const { searchTerm, results, error, isLoading } = this.state;
-
-    if (isLoading) {
-      return (
-        <div className="loader-wrapper">
-          <div className="loader" />
-        </div>
-      );
-    }
-
-    if (error) {
-      return <div>Something went wrong...</div>;
-    }
-
+  if (isLoading) {
     return (
-      <div className="search-container">
-        <div className="search-container-control">
-          <input
-            type="text"
-            className="input"
-            value={searchTerm}
-            onChange={this.handleSearchInputChange}
-          />
-          <button type="button" className="btn" onClick={this.handleSearch}>
-            Search
-          </button>
-        </div>
-        <div>
-          <SpeciesList species={results} />
-        </div>
+      <div className="loader-wrapper">
+        <div className="loader" />
       </div>
     );
   }
+
+  if (error) {
+    return <div>Something went wrong...</div>;
+  }
+
+  return (
+    <div className="search-container">
+      <div className="search-container-control">
+        <input
+          type="text"
+          className="input"
+          value={inputData} // Changed this to inputData to reflect the current input
+          onChange={handleSearchInputChange}
+        />
+        <button type="button" className="btn" onClick={handleSearch}>
+          Search
+        </button>
+      </div>
+      <div>
+        <SpeciesList species={results} />
+      </div>
+    </div>
+  );
 }

@@ -1,33 +1,15 @@
-import React from 'react';
-import { SimulatedErrorComponentIState } from '../types/Types';
+import { useState } from 'react';
 
-export default class SimulatedErrorComponent extends React.Component<
-  object,
-  SimulatedErrorComponentIState
-> {
-  constructor(props: object) {
-    super(props);
-    this.state = {
-      error: false,
-    };
+export default function SimulatedErrorComponent() {
+  const [error, setError] = useState(false);
+
+  if (error) {
+    throw new Error('Simulated error for testing Error Boundaries');
   }
 
-  render() {
-    const { error } = this.state;
-
-    if (error) {
-      console.log(this);
-      throw new Error('error examle');
-    }
-
-    return (
-      <button
-        type="button"
-        className="btn"
-        onClick={() => this.setState({ error: true })}
-      >
-        Throw Error
-      </button>
-    );
-  }
+  return (
+    <button type="button" className="btn" onClick={() => setError(true)}>
+      Throw Error
+    </button>
+  );
 }

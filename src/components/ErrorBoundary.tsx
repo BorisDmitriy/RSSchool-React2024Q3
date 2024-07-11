@@ -23,7 +23,18 @@ export default class ErrorBoundary extends React.Component<
     const { children } = this.props;
 
     if (hasError) {
-      return <h1>Sorry, something went wrong !</h1>;
+      return (
+        <div>
+          <h1>Sorry, something went wrong !</h1>
+          <button
+            className="btn"
+            onClick={() => window.location.reload()}
+            type="button"
+          >
+            Refresh Page
+          </button>
+        </div>
+      );
     }
 
     return children;

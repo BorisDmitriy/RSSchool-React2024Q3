@@ -1,4 +1,4 @@
-import { ErrResponse, OneSpecie } from '../types/Types';
+import { ErrResp, OneSpecie } from '../types/Types';
 
 async function getAllSpecies(
   url: string,
@@ -20,9 +20,9 @@ async function getAllSpecies(
   return newResults;
 }
 
-export default async function getSpecies(
+export default async function getSearchedSpecies(
   searchData?: string,
-): Promise<OneSpecie[] | ErrResponse> {
+): Promise<OneSpecie[] | ErrResp> {
   try {
     const baseUrl = 'https://swapi.dev/api/species/';
     const url = searchData ? `${baseUrl}?search=${searchData}` : baseUrl;
@@ -30,6 +30,6 @@ export default async function getSpecies(
     return await getAllSpecies(url);
   } catch (error) {
     console.error('There has been a problem with your fetch operation:', error);
-    return (error as Error).message as unknown as ErrResponse;
+    return (error as Error).message as unknown as ErrResp;
   }
 }
