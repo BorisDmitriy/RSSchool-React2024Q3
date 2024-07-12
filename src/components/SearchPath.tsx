@@ -5,7 +5,6 @@ import SpeciesList from './SpeciesList';
 import getAllSpeciesAPI from '../api/getAllSpeciesAPI';
 import getSearchedSpeciesAPI from '../api/getSearchedSpeciesAPI';
 import { OneSpecie } from '../types/Types';
-// import SpecieCard from './SpecieCard';
 
 export default function SearchPath() {
   const navigate = useNavigate();
@@ -16,10 +15,6 @@ export default function SearchPath() {
   const [results, setResults] = useState<OneSpecie[]>([]);
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  // add search name from url
-  // const searchParamsAlls = new URLSearchParams(location.search);
-  // const speiceParamForSpecie = searchParamsAlls.get('speice');
 
   const fetchData = async (searchData?: string) => {
     setIsLoading(true);
@@ -44,7 +39,6 @@ export default function SearchPath() {
   };
 
   useEffect(() => {
-    // Fetch all species or searched species based on searchTerm
     fetchData(searchTerm);
   }, [searchTerm]);
 
@@ -59,11 +53,8 @@ export default function SearchPath() {
     setSearchTerm(trimmedInputData);
     fetchData(trimmedInputData);
 
-    // Get the current search parameters
     const searchParams = new URLSearchParams(location.search);
-    // Update the search parameter with the new search term
     searchParams.set('search', encodeURIComponent(trimmedInputData));
-    // Navigate to the updated URL without removing other parameters
     navigate({ pathname: location.pathname, search: searchParams.toString() });
   };
 
@@ -85,7 +76,7 @@ export default function SearchPath() {
         <input
           type="text"
           className="input"
-          value={inputData} // Changed this to inputData to reflect the current input
+          value={inputData}
           onChange={handleSearchInputChange}
         />
         <button type="button" className="btn" onClick={handleSearch}>
@@ -93,9 +84,12 @@ export default function SearchPath() {
         </button>
       </div>
       <div className="container">
-        <SpeciesList species={results} />
-
-        <Outlet />
+        <div className="container-list">
+          <SpeciesList species={results} />
+        </div>
+        <div className="container-card">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

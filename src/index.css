@@ -21,30 +21,49 @@ body {
 .container {
   display: flex;
 }
+.not_found_div{
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container-list {
+  display: flex;
+}
+
+.container-card {
+  display: flex;
+}
 
 .species_items {
-  display: flex;
-  width: 70%;
-  gap: 10px;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+  display: grid;
 
+  gap: 20px;
+  grid-template-columns: repeat(2, 1fr);
+
+  justify-items: center;
+  align-items: start;
+  justify-content: space-around;
+
+  padding: 20px;
   border: 1px solid #fc7353;
 }
 
 .specie_card {
   display: flex;
-  width: 30%;
   border: 1px solid #fc7353;
   flex-direction: column;
   align-items: center;
+  padding: 20px;
 }
 
-.species_item {
-  width: 100%;
-  max-width: 300px;
+.specie_item {
   display: flex;
+  width: 250px;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
@@ -53,9 +72,7 @@ body {
   border: 1px solid #fc7353;
   background-color: #f9f0e1;
   padding: 5px;
-  margin: 5px;
 }
-
 .search-container {
   display: flex;
   flex-direction: column;
@@ -104,6 +121,11 @@ body {
   padding: 0px 5px;
   font-size: 20px;
 }
+
+.active-item{
+  background-color: #fc7353;
+}
+
 
 @keyframes l1 {
   to {
