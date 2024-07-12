@@ -13,7 +13,6 @@ export default function SpeciesList({ species }: SpeciesListProps) {
       </div>
     );
   }
-  console.log(species);
 
   const getIdFromUrl = (url: string) => {
     const parts = url.split('/');

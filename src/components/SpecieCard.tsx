@@ -10,7 +10,6 @@ export default function SpecieCard() {
   const currentSearch = location.search;
 
   const [specieData, setSpecieData] = useState<OneSpecie>();
-  console.log(id);
 
   const fetchData = useCallback(
     async (ids: string) => {

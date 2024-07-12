@@ -43,7 +43,7 @@
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": ["vite.config.ts", "**/*.test.js", "**/*.spec.js"]
+        "devDependencies": ["vite.config.ts", "**/*.test.tsx", "**/*.spec.js"]
       }
     ],
 
