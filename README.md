@@ -9,6 +9,11 @@
 - `format:fix`: Uses Prettier to automatically format all .ts and .tsx files in the src directory.
 - `pre-commit`: Checks TypeScript files for formatting and linting issues before committing changes.
 - `preview`: Serves the built app, usually after `build`, to preview before deployment.
+- `pre-push`: Runs tests to ensure no issues before pushing code to the repository.
+- `jest-preview`: Allows you to run Jest tests with a visual preview.
+- `test`: Runs all Jest tests.
+- `test:coverage`: Generates test coverage report.
+- `test:watch`: Runs Jest tests in watch mode.
 
 ## Usage Instructions
 
