@@ -10,7 +10,9 @@
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "format:fix": "prettier --write 'src/**/*.{ts,tsx}'",
     "pre-commit": "prettier --check 'src/**/*.{ts,tsx}' && eslint . --ext .ts,.tsx --max-warnings=0",
+    "pre-push": "jest --watch=false",
     "preview": "vite preview",
+    "jest-preview": "jest-preview",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch"
@@ -45,6 +47,7 @@
     "husky": "^9.0.11",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.7.0",
+    "jest-preview": "^0.3.1",
     "prettier": "^3.3.2",
     "ts-jest": "^29.2.2",
     "ts-node": "^10.9.2",

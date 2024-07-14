@@ -11,24 +11,19 @@ export default function SpecieCard() {
 
   const [specieData, setSpecieData] = useState<OneSpecie>();
 
-  const fetchData = useCallback(
-    async (ids: string) => {
-      setIsLoading(true);
-      try {
-        console.log('id', id);
-
-        const res = await getSpecieAPI(ids);
-        if (res) {
-          setSpecieData(res);
-        }
-      } catch (error) {
-        console.error('error fetching data:', error);
-      } finally {
-        setIsLoading(false);
+  const fetchData = useCallback(async (ids: string) => {
+    setIsLoading(true);
+    try {
+      const res = await getSpecieAPI(ids);
+      if (res) {
+        setSpecieData(res);
       }
-    },
-    [id],
-  );
+    } catch (error) {
+      console.error('error fetching data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -36,12 +31,10 @@ export default function SpecieCard() {
     }
   }, [id, fetchData]);
 
-  console.log('specieData', specieData);
-
   if (isLoading) {
     return (
       <div className="loader-wrapper">
-        <div className="loader" />
+        <div className="loader" data-testid="card-loader" />
       </div>
     );
   }
@@ -58,7 +51,11 @@ export default function SpecieCard() {
       <p>AverageClifespan: {specieData?.average_lifespan}</p>
       <p>Language: {specieData?.language}</p>
 
-      <Link className="no-link-style" to={`/specie/${currentSearch}`}>
+      <Link
+        data-testid="close-card-link"
+        className="no-link-style"
+        to={`/specie/${currentSearch}`}
+      >
         <button type="button" className="btn closeCardBtn">
           Close card
         </button>

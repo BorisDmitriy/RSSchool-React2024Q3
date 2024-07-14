@@ -6,7 +6,11 @@ export default function SpecieItem({ specieData, id }: SpecieItemProps) {
   const currentSearch = location.search;
 
   return (
-    <NavLink className="no-link-style" to={`/specie/${id}${currentSearch}`}>
+    <NavLink
+      data-testid="item-link"
+      className="no-link-style"
+      to={`/specie/${id}${currentSearch}`}
+    >
       {({ isActive }) => (
         <div
           className={

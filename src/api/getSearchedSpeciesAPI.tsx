@@ -1,4 +1,4 @@
-import { ErrResp, OneSpecie } from '../types/Types';
+import { OneSpecie } from '../types/Types';
 
 async function getAllSpecies(
   url: string,
@@ -16,20 +16,14 @@ async function getAllSpecies(
   if (pageData.next) {
     return getAllSpecies(pageData.next, newResults);
   }
-
   return newResults;
 }
 
 export default async function getSearchedSpecies(
   searchData?: string,
-): Promise<OneSpecie[] | ErrResp> {
-  try {
-    const baseUrl = 'https://swapi.dev/api/species/';
-    const url = searchData ? `${baseUrl}?search=${searchData}` : baseUrl;
+): Promise<OneSpecie[]> {
+  const baseUrl = 'https://swapi.dev/api/species/';
+  const url = searchData ? `${baseUrl}?search=${searchData}` : baseUrl;
 
-    return await getAllSpecies(url);
-  } catch (error) {
-    console.error('There has been a problem with your fetch operation:', error);
-    return (error as Error).message as unknown as ErrResp;
-  }
+  return getAllSpecies(url);
 }
