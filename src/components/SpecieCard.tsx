@@ -39,6 +39,24 @@ export default function SpecieCard() {
     );
   }
 
+  if (specieData?.detail) {
+    return (
+      <div className="specie_card">
+        <h3>Data not found</h3>
+
+        <Link
+          data-testid="close-card-link"
+          className="no-link-style"
+          to={`/specie/${currentSearch}`}
+        >
+          <button type="button" className="btn closeCardBtn">
+            Close card
+          </button>
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="specie_card">
       <h3>Name: {specieData?.name}</h3>

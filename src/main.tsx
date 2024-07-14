@@ -1,12 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from 'react-router-dom';
 import App from './App';
 import NotFoundPage from './components/NotFoundPage';
 import SpecieCard from './components/SpecieCard';
 
 const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Navigate to="/specie" replace />,
+    errorElement: <NotFoundPage />,
+  },
   {
     path: '/specie',
     element: <App />,

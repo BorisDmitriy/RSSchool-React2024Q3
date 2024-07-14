@@ -14,6 +14,7 @@ export interface OneSpecie {
   created: string;
   edited: string;
   url: string;
+  detail?: 'Not found';
 }
 export interface SpecieItemProps {
   specieData: OneSpecie;
