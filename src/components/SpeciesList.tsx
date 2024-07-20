@@ -1,11 +1,7 @@
-import { Link, useLocation } from 'react-router-dom';
 import { SpeciesListProps } from '../types/Types';
 import SpecieItem from './SpecieItem';
 
 export default function SpeciesList({ species }: SpeciesListProps) {
-  const location = useLocation();
-  const currentSearch = location.search;
-
   if (species.length === 0) {
     return (
       <div>
@@ -21,16 +17,14 @@ export default function SpeciesList({ species }: SpeciesListProps) {
   };
 
   return (
-    <Link className="no-link-style" to={`/specie/${currentSearch}`}>
-      <div className="species_items">
-        {species.map((specieData) => (
-          <SpecieItem
-            key={specieData.name}
-            specieData={specieData}
-            id={getIdFromUrl(specieData.url).toString()}
-          />
-        ))}
-      </div>
-    </Link>
+    <div className="species_items">
+      {species.map((specieData) => (
+        <SpecieItem
+          key={specieData.name}
+          specieData={specieData}
+          id={getIdFromUrl(specieData.url).toString()}
+        />
+      ))}
+    </div>
   );
 }
