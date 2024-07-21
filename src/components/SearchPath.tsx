@@ -2,45 +2,33 @@ import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import useLocalStorage from './useLocalStorage';
 import SpeciesList from './SpeciesList';
-import getAllSpeciesAPI from '../api/getAllSpeciesAPI';
-import getSearchedSpeciesAPI from '../api/getSearchedSpeciesAPI';
-import { OneSpecie } from '../types/Types';
+import { useGetSpeciesQuery } from '../redux';
+import { addCurrentPageSpecies } from '../redux/currentPageSpeciesSlice';
+import { useAppDispatch } from '../redux/hooks';
 
 export default function SearchPath() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
+  const [page, setPage] = useState(1);
   const [inputData, setInputData] = useState(searchTerm);
-  const [results, setResults] = useState<OneSpecie[]>([]);
-  const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const fetchData = async (searchData?: string) => {
-    setIsLoading(true);
-    try {
-      let data;
-      if (searchData !== '') {
-        data = await getSearchedSpeciesAPI(searchData);
-      } else {
-        data = await getAllSpeciesAPI();
-      }
+  // add redux
+  const {
+    data = [],
+    isError,
+    isLoading,
+    isFetching,
+  } = useGetSpeciesQuery({ page, searchTerm });
 
-      if (Array.isArray(data)) {
-        setResults(data);
-      } else {
-        setError(true);
-      }
-    } catch (fetchError) {
-      setError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    fetchData(searchTerm);
-  }, [searchTerm]);
+    if (!isFetching) {
+      dispatch(addCurrentPageSpecies(data));
+    }
+  }, [data, dispatch, isFetching]);
 
   const handleSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -50,15 +38,15 @@ export default function SearchPath() {
 
   const handleSearch = () => {
     const trimmedInputData = inputData.trim();
+    setPage(1);
     setSearchTerm(trimmedInputData);
-    fetchData(trimmedInputData);
 
     const searchParams = new URLSearchParams(location.search);
     searchParams.set('search', encodeURIComponent(trimmedInputData));
     navigate({ pathname: location.pathname, search: searchParams.toString() });
   };
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <div className="loader-wrapper">
         <div className="loader" />
@@ -66,8 +54,9 @@ export default function SearchPath() {
     );
   }
 
-  if (error) {
-    return <div>Something went wrong...</div>;
+  if (isError) {
+    console.error('error');
+    throw new Error('Error!!!');
   }
 
   return (
@@ -85,7 +74,26 @@ export default function SearchPath() {
       </div>
       <div className="container">
         <div className="container-list">
-          <SpeciesList species={results} />
+          <SpeciesList />
+          <div className="container-pageBtns">
+            <button
+              type="button"
+              className="btn"
+              disabled={data.previous === null}
+              onClick={() => setPage((prevPage) => prevPage - 1)}
+            >
+              previous
+            </button>
+            <span className="page-span">{page}</span>
+            <button
+              type="button"
+              className="btn"
+              disabled={data.next === null}
+              onClick={() => setPage((prevPage) => prevPage + 1)}
+            >
+              next
+            </button>
+          </div>
         </div>
         <div className="container-card">
           <Outlet />

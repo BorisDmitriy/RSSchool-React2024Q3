@@ -1,3 +1,10 @@
+export interface ResponseSpecies<OneSpecie> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+
+  results: OneSpecie[];
+}
 export interface OneSpecie {
   name: string;
   classification: string;
@@ -14,7 +21,6 @@ export interface OneSpecie {
   created: string;
   edited: string;
   url: string;
-  detail?: 'Not found';
 }
 export interface SpecieItemProps {
   specieData: OneSpecie;

@@ -1,8 +1,13 @@
-import { SpeciesListProps } from '../types/Types';
+import { OneSpecie } from '../types/Types';
 import SpecieItem from './SpecieItem';
+import { useAppSelector } from '../redux/hooks';
 
-export default function SpeciesList({ species }: SpeciesListProps) {
-  if (species.length === 0) {
+export default function SpeciesList() {
+  const currentPageData = useAppSelector(
+    (state) => state.currentPageSpecies.list,
+  );
+
+  if (currentPageData.length === 0) {
     return (
       <div>
         <p>data not found</p>
@@ -18,7 +23,7 @@ export default function SpeciesList({ species }: SpeciesListProps) {
 
   return (
     <div className="species_items">
-      {species.map((specieData) => (
+      {currentPageData.map((specieData: OneSpecie) => (
         <SpecieItem
           key={specieData.name}
           specieData={specieData}

@@ -21,7 +21,8 @@ body {
 .container {
   display: flex;
 }
-.not_found_div{
+
+.not_found_div {
   display: flex;
   gap: 20px;
   width: 100%;
@@ -33,6 +34,15 @@ body {
 
 .container-list {
   display: flex;
+  flex-direction: column;
+}
+
+.container-pageBtns {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+
+  border: 1px solid #fc7353;
 }
 
 .container-card {
@@ -73,6 +83,7 @@ body {
   background-color: #f9f0e1;
   padding: 5px;
 }
+
 .search-container {
   display: flex;
   flex-direction: column;
@@ -109,8 +120,12 @@ body {
   transition: background-color 0.2s ease-out;
   cursor: pointer;
 }
+.btn:disabled {
+  background-color: #cccccc;
+  cursor: default;
+}
 
-.btn:hover {
+.btn:enabled:hover {
   background-color: #fc7353;
 }
 
@@ -122,7 +137,7 @@ body {
   font-size: 20px;
 }
 
-.active-item{
+.active-item {
   background-color: #fc7353;
 }
 
