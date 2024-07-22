@@ -6,7 +6,6 @@ export default function SpeciesList() {
   const currentPageData = useAppSelector(
     (state) => state.currentPageSpecies.list,
   );
-
   if (currentPageData.length === 0) {
     return (
       <div>

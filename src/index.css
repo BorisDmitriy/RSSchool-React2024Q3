@@ -71,6 +71,20 @@ body {
   padding: 20px;
 }
 
+.item-container {
+
+  border: 1px solid #fc7353;
+  background-color: #f9f0e1;
+  padding: 5px;
+
+}
+
+.item-container .btn {
+
+  border: 0px solid #fc7353;
+
+}
+
 .specie_item {
   display: flex;
   width: 250px;
@@ -79,9 +93,6 @@ body {
   justify-content: flex-start;
   gap: 5px;
 
-  border: 1px solid #fc7353;
-  background-color: #f9f0e1;
-  padding: 5px;
 }
 
 .search-container {
@@ -89,6 +100,8 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 20px;
+
+  margin-bottom: 70px;
 }
 
 .search-container-control {
@@ -97,6 +110,7 @@ body {
 }
 
 .loader-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -120,6 +134,7 @@ body {
   transition: background-color 0.2s ease-out;
   cursor: pointer;
 }
+
 .btn:disabled {
   background-color: #cccccc;
   cursor: default;
@@ -135,6 +150,72 @@ body {
 
   padding: 0px 5px;
   font-size: 20px;
+}
+
+.input-checkbox {
+  appearance: none;
+  background-color: white;
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 25px;
+  height: 25px;
+
+  border: 1px solid #fc7353;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+}
+
+.input-checkbox:before {
+  content: '';
+  width: 1em;
+  height: 1em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em #fc7353;
+  background-color: white;
+}
+
+.input-checkbox:checked:before {
+  transform: scale(1);
+}
+
+.label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  padding: 5px;
+  gap: 5px;
+}
+
+.flyout {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: #d7cfc3;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+
+  transition: visibility 0.2s, opacity 0.2s ease-in-out;
+  opacity: 0;
+}
+
+.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
 }
 
 .active-item {
