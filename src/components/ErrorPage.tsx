@@ -3,7 +3,6 @@ import ThemeContext from './contex/ThemeContext';
 
 export default function ErrorPage() {
   const darkTheme = useContext(ThemeContext);
-  console.log('dark theme error;', darkTheme);
 
   return (
     <div className="error_page">

@@ -1,8 +1,9 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { SpecieItemProps } from '../types/Types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { addSpecie, removeSpecie } from '../redux/selectedItemsSpeciesSlice';
+import ThemeContext from './contex/ThemeContext';
 
 export default function SpecieItem({ specieData, id }: SpecieItemProps) {
   const location = useLocation();
@@ -13,6 +14,8 @@ export default function SpecieItem({ specieData, id }: SpecieItemProps) {
   );
 
   const dispatch = useAppDispatch();
+
+  const darkTheme = useContext(ThemeContext);
 
   const isSelected = selectedItemsData.some(
     (selectedSpecie) => selectedSpecie.name === specieData.name,
@@ -39,7 +42,7 @@ export default function SpecieItem({ specieData, id }: SpecieItemProps) {
   }
 
   return (
-    <div className="item-container">
+    <div className={`item-container ${darkTheme ? 'dark-theme' : ''}`}>
       <NavLink
         data-testid="item-link"
         className="no-link-style"
@@ -47,9 +50,7 @@ export default function SpecieItem({ specieData, id }: SpecieItemProps) {
       >
         {({ isActive }) => (
           <div
-            className={
-              isActive ? 'btn specie_item active-item' : 'btn specie_item'
-            }
+            className={`btn specie_item ${isActive ? 'active-item' : ''} ${darkTheme ? 'dark-theme' : ''}`}
           >
             <h3>Name: {specieData.name}</h3>
             <p>Classification: {specieData.classification}</p>

@@ -17,8 +17,10 @@ export default function App() {
   return (
     <ThemeContext.Provider value={darkTheme}>
       <ErrorBoundary>
-        <div className={`wrapper ${darkTheme ? 'dark-theme' : ''}`}>
-          <h1>Species in Star Wars</h1>
+        <div className="wrapper">
+          <h1 style={{ color: darkTheme ? 'white' : 'initial' }}>
+            Species in Star Wars
+          </h1>
           <div className="container-header-btns">
             <SimulatedErrorComponent />
             <button

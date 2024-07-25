@@ -43,6 +43,7 @@ body.dark-theme {
 .container-pageBtns {
   display: flex;
   justify-content: space-around;
+  align-items: center;
   padding: 20px;
 
   border: 1px solid #fc7353;
@@ -66,6 +67,11 @@ body.dark-theme {
   border: 1px solid #fc7353;
 }
 
+.species_items.dark-theme {
+  border: 1px solid #f9f0e1;  
+  background-color: #7e7a74;
+}
+
 .specie_card {
   display: flex;
   border: 1px solid #fc7353;
@@ -75,12 +81,19 @@ body.dark-theme {
   padding: 20px;
 }
 
-.item-container {
+.specie_card.dark-theme{
+  background-color: #d7cfc3;
+}
 
+.item-container {
   border: 1px solid #fc7353;
   background-color: #f9f0e1;
   padding: 5px;
+}
 
+.item-container.dark-theme {
+  border: 1px solid #f9f0e1;
+  background-color: #fc7353;
 }
 
 .item-container .btn {
@@ -96,7 +109,11 @@ body.dark-theme {
   align-items: center;
   justify-content: flex-start;
   gap: 5px;
+}
 
+.specie_item.dark-theme{
+  border: 1px solid #f9f0e1;
+  background-color: #fc7353;
 }
 
 .search-container {
@@ -127,6 +144,9 @@ body.dark-theme {
   background: radial-gradient(circle closest-side, #000 90%, #0000) 0/calc(100%/3) 100% space;
   clip-path: inset(0 100% 0 0);
   animation: l1 1s steps(4) infinite;
+}
+.loader.dark-theme {
+  background: radial-gradient(circle closest-side, #ffffff 90%, #ffffff) 0/calc(100%/3) 100% space;
 }
 
 .btn {
@@ -222,6 +242,10 @@ body.dark-theme {
   opacity: 0;
 }
 
+.flyout.dark-theme {
+  background-color: #514e4a;
+}
+
 .visible {
   visibility: visible;
   opacity: 1;
@@ -235,7 +259,9 @@ body.dark-theme {
 .active-item {
   background-color: #fc7353;
 }
-
+.active-item.dark-theme {
+  background-color: #d7cfc3;
+}
 
 @keyframes l1 {
   to {

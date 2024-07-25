@@ -1,12 +1,16 @@
+import { useContext } from 'react';
 import { clearSpecieList } from '../redux';
 import { useAppSelector, useAppDispatch } from '../redux/hooks';
 import { OneSpecie } from '../types/Types';
+import ThemeContext from './contex/ThemeContext';
 
 export default function FlyoutElement() {
   const selectedItemsData = useAppSelector(
     (state) => state.selectedItemsSpecies.list,
   );
   const dispatch = useAppDispatch();
+
+  const darkTheme = useContext(ThemeContext);
 
   const handleClearBtn = () => {
     dispatch(clearSpecieList());
@@ -71,13 +75,25 @@ export default function FlyoutElement() {
   const visibilityClass = selectedItemsData.length === 0 ? 'hidden' : 'visible';
 
   return (
-    <div className={`flyout ${visibilityClass}`}>
-      <button className="btn" onClick={handleClearBtn} type="button">
+    <div
+      className={`flyout ${visibilityClass} ${darkTheme ? 'dark-theme' : ''}`}
+    >
+      <button
+        className={`btn ${darkTheme ? 'dark-theme' : ''}`}
+        onClick={handleClearBtn}
+        type="button"
+      >
         Unselect all
       </button>
-      <h1>{selectedItemsData.length} items are selected</h1>
+      <h1 style={{ color: darkTheme ? 'white' : 'initial' }}>
+        {selectedItemsData.length} items are selected
+      </h1>
 
-      <button className="btn" onClick={handleDownloadBtn} type="button">
+      <button
+        className={`btn ${darkTheme ? 'dark-theme' : ''}`}
+        onClick={handleDownloadBtn}
+        type="button"
+      >
         Download
       </button>
     </div>

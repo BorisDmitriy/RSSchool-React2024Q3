@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import useLocalStorage from './useLocalStorage';
 import SpeciesList from './SpeciesList';
 import { useGetSpeciesQuery } from '../redux';
 import { addCurrentPageSpecies } from '../redux/currentPageSpeciesSlice';
 import { useAppDispatch } from '../redux/hooks';
+import ThemeContext from './contex/ThemeContext';
 
 export default function SearchPath() {
   const navigate = useNavigate();
@@ -13,6 +14,8 @@ export default function SearchPath() {
   const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
   const [page, setPage] = useState(1);
   const [inputData, setInputData] = useState(searchTerm);
+
+  const darkTheme = useContext(ThemeContext);
 
   // add redux
   const {
@@ -49,7 +52,7 @@ export default function SearchPath() {
   if (isLoading || isFetching) {
     return (
       <div className="loader-wrapper">
-        <div className="loader" />
+        <div className={`loader ${darkTheme ? 'dark-theme' : ''}`} />
       </div>
     );
   }
@@ -68,17 +71,22 @@ export default function SearchPath() {
           value={inputData}
           onChange={handleSearchInputChange}
         />
-        <button type="button" className="btn" onClick={handleSearch}>
+        <button
+          type="button"
+          className={`btn ${darkTheme ? 'dark-theme' : ''}`}
+          onClick={handleSearch}
+        >
           Search
         </button>
       </div>
+
       <div className="container">
         <div className="container-list">
           <SpeciesList />
           <div className="container-pageBtns">
             <button
               type="button"
-              className="btn"
+              className={`btn ${darkTheme ? 'dark-theme' : ''}`}
               disabled={data.previous === null}
               onClick={() => setPage((prevPage) => prevPage - 1)}
             >
@@ -87,7 +95,7 @@ export default function SearchPath() {
             <span className="page-span">{page}</span>
             <button
               type="button"
-              className="btn"
+              className={`btn ${darkTheme ? 'dark-theme' : ''}`}
               disabled={data.next === null}
               onClick={() => setPage((prevPage) => prevPage + 1)}
             >
@@ -95,6 +103,7 @@ export default function SearchPath() {
             </button>
           </div>
         </div>
+
         <div className="container-card">
           <Outlet />
         </div>

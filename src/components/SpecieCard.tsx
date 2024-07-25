@@ -1,10 +1,14 @@
+import { useContext } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useGetOneSpecieQuery } from '../redux';
+import ThemeContext from './contex/ThemeContext';
 
 export default function SpecieCard() {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const currentSearch = location.search;
+
+  const darkTheme = useContext(ThemeContext);
 
   // add redux query
   const {
@@ -17,14 +21,17 @@ export default function SpecieCard() {
   if (isLoading || isFetching) {
     return (
       <div className="loader-wrapper">
-        <div className="loader" data-testid="card-loader" />
+        <div
+          className={`loader ${darkTheme ? 'dark-theme' : ''}`}
+          data-testid="card-loader"
+        />
       </div>
     );
   }
 
   if (isError) {
     return (
-      <div className="specie_card">
+      <div className={`specie_card ${darkTheme ? 'dark-theme' : ''}`}>
         <h3>Data not found</h3>
 
         <Link
@@ -56,14 +63,17 @@ export default function SpecieCard() {
   );
 
   return (
-    <div className="specie_card">
+    <div className={`specie_card ${darkTheme ? 'dark-theme' : ''}`}>
       {isError ? errorElement() : correctElement()}
       <Link
         data-testid="close-card-link"
         className="no-link-style"
         to={`/specie/${currentSearch}`}
       >
-        <button type="button" className="btn closeCardBtn">
+        <button
+          type="button"
+          className={`btn closeCardBtn${darkTheme ? 'dark-theme' : ''}`}
+        >
           Close card
         </button>
       </Link>
