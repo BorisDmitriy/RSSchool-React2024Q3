@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { clearSpecieList } from '../redux';
 import { useAppSelector, useAppDispatch } from '../redux/hooks';
 import { OneSpecie } from '../types/Types';
@@ -12,9 +12,7 @@ export default function FlyoutElement() {
 
   const darkTheme = useContext(ThemeContext);
 
-  const handleClearBtn = () => {
-    dispatch(clearSpecieList());
-  };
+  const [csvDataUrl, setCsvDataUrl] = useState('');
 
   const convertToCSV = (data: OneSpecie[]) => {
     const headers = [
@@ -58,21 +56,29 @@ export default function FlyoutElement() {
     return [headers.join(','), ...rows].join('\r\n');
   };
 
-  const handleDownloadBtn = () => {
-    const csvContent = convertToCSV(selectedItemsData);
+  useEffect(() => {
+    let urlCleanup = () => {};
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    if (selectedItemsData.length > 0) {
+      const csvString = convertToCSV(selectedItemsData);
+      const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      setCsvDataUrl(url);
 
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', `${selectedItemsData.length}_species.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+      urlCleanup = () => {
+        URL.revokeObjectURL(url);
+      };
+    }
+
+    return urlCleanup;
+  }, [selectedItemsData]);
+
+  const handleClearBtn = () => {
+    dispatch(clearSpecieList());
   };
 
   const visibilityClass = selectedItemsData.length === 0 ? 'hidden' : 'visible';
+  const downloadFileName = `${selectedItemsData.length}_species.csv`;
 
   return (
     <div
@@ -89,13 +95,13 @@ export default function FlyoutElement() {
         {selectedItemsData.length} items are selected
       </h1>
 
-      <button
-        className={`btn ${darkTheme ? 'dark-theme' : ''}`}
-        onClick={handleDownloadBtn}
-        type="button"
+      <a
+        href={csvDataUrl}
+        download={downloadFileName}
+        className={`btn no-link-style ${darkTheme ? 'dark-theme' : ''}`}
       >
         Download
-      </button>
+      </a>
     </div>
   );
 }
