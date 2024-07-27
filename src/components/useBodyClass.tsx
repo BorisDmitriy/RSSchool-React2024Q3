@@ -3,8 +3,6 @@ import { useEffect } from 'react';
 // Custom hook to add/remove a class from the body element
 const useBodyClass = (className: string, condition: boolean) => {
   useEffect(() => {
-    console.log('condition', condition);
-
     // When the condition is true, add the class
     if (condition) {
       document.body.classList.add(className);
