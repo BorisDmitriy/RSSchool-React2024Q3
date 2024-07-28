@@ -98,7 +98,7 @@ export default function FlyoutElement() {
       <a
         href={csvDataUrl}
         download={downloadFileName}
-        className={`btn no-link-style ${darkTheme ? 'dark-theme' : ''}`}
+        className={`btn btn-a no-link-style ${darkTheme ? 'dark-theme' : ''}`}
       >
         Download
       </a>

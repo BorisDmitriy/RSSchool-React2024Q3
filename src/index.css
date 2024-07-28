@@ -171,10 +171,19 @@ body.dark-theme {
   background-color: #7e7a74;
 }
 
-.btn:enabled:hover {
+.btn:enabled:hover{
   background-color: #fc7353;
+}
 
-}.btn:enabled:hover.dark-theme  {
+.btn:enabled:hover.dark-theme {
+  background-color: #f9f0e1;
+}
+
+.btn-a:hover {
+  background-color: #fc7353;
+}
+
+.btn-a:hover.dark-theme  {
   background-color: #f9f0e1;
 }
 
