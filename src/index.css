@@ -1,0 +1,279 @@
+body {
+  background-color: #f9f0e1;
+  position: relative;
+  padding: 70px 0 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+}
+body.dark-theme {
+  background-color: #7e7a74;
+}
+
+.no-link-style {
+  text-decoration: none;
+  color: inherit;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.container {
+  display: flex;
+}
+
+.not_found_div {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.container-pageBtns {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px;
+
+  border: 1px solid #fc7353;
+}
+
+.container-card {
+  display: flex;
+}
+
+.species_items {
+  display: grid;
+
+  gap: 20px;
+  grid-template-columns: repeat(2, 1fr);
+
+  justify-items: center;
+  align-items: start;
+  justify-content: space-around;
+
+  padding: 20px;
+  border: 1px solid #fc7353;
+}
+
+.species_items.dark-theme {
+  border: 1px solid #f9f0e1;  
+  background-color: #7e7a74;
+}
+
+.specie_card {
+  display: flex;
+  border: 1px solid #fc7353;
+  background-color: #f9f0e1;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.specie_card.dark-theme{
+  background-color: #d7cfc3;
+}
+
+.item-container {
+  border: 1px solid #fc7353;
+  background-color: #f9f0e1;
+  padding: 5px;
+}
+
+.item-container.dark-theme {
+  border: 1px solid #f9f0e1;
+  background-color: #fc7353;
+}
+
+.item-container .btn {
+
+  border: 0px solid #fc7353;
+
+}
+
+.specie_item {
+  display: flex;
+  width: 250px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+}
+
+.specie_item.dark-theme{
+  border: 1px solid #f9f0e1;
+  background-color: #fc7353;
+}
+
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+  margin-bottom: 70px;
+}
+
+.search-container-control {
+  display: flex;
+  gap: 5px;
+}
+
+.loader-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 5em;
+}
+
+.loader {
+  width: 60px;
+  aspect-ratio: 4;
+  background: radial-gradient(circle closest-side, #000 90%, #0000) 0/calc(100%/3) 100% space;
+  clip-path: inset(0 100% 0 0);
+  animation: l1 1s steps(4) infinite;
+}
+.loader.dark-theme {
+  background: radial-gradient(circle closest-side, #ffffff 90%, #ffffff) 0/calc(100%/3) 100% space;
+}
+
+.btn {
+  padding: 5px 10px;
+  font: inherit;
+  color: inherit;
+  border: 1px solid #fc7353;
+  background-color: #f9f0e1;
+  transition: background-color 0.2s ease-out;
+  cursor: pointer;
+}
+.btn.dark-theme {
+  border: 1px solid #f9f0e1;
+  background-color: #fc7353;
+}
+
+.btn:disabled {
+  background-color: #cccccc;
+  cursor: default;
+}
+.btn:disabled.dark-theme {
+  background-color: #7e7a74;
+}
+
+.btn:enabled:hover{
+  background-color: #fc7353;
+}
+
+.btn:enabled:hover.dark-theme {
+  background-color: #f9f0e1;
+}
+
+.btn-a:hover {
+  background-color: #fc7353;
+}
+
+.btn-a:hover.dark-theme  {
+  background-color: #f9f0e1;
+}
+
+.input {
+  border: 1px solid #fc7353;
+  height: 40px;
+
+  padding: 0px 5px;
+  font-size: 20px;
+}
+
+.input-checkbox {
+  appearance: none;
+  background-color: white;
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 25px;
+  height: 25px;
+
+  border: 1px solid #fc7353;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+}
+
+.input-checkbox:before {
+  content: '';
+  width: 1em;
+  height: 1em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em #fc7353;
+  background-color: white;
+}
+
+.input-checkbox:checked:before {
+  transform: scale(1);
+}
+
+.label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  padding: 5px;
+  gap: 5px;
+}
+
+.flyout {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: #d7cfc3;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+
+  transition: visibility 0.2s, opacity 0.2s ease-in-out;
+  opacity: 0;
+}
+
+.flyout.dark-theme {
+  background-color: #514e4a;
+}
+
+.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.active-item {
+  background-color: #fc7353;
+}
+.active-item.dark-theme {
+  background-color: #d7cfc3;
+}
+
+@keyframes l1 {
+  to {
+    clip-path: inset(0 -34% 0 0)
+  }
+}
