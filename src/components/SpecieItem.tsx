@@ -1,13 +1,14 @@
-import { NavLink, useLocation } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { SpecieItemProps } from '../types/Types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { addSpecie, removeSpecie } from '../redux/selectedItemsSpeciesSlice';
 import ThemeContext from './contex/ThemeContext';
 
 export default function SpecieItem({ specieData, id }: SpecieItemProps) {
-  const location = useLocation();
-  const currentSearch = location.search;
+  const router = useRouter();
+  const { query } = router;
+  const isActive = query.id === id;
 
   const selectedItemsData = useAppSelector(
     (state) => state.selectedItemsSpecies.list,
@@ -43,21 +44,39 @@ export default function SpecieItem({ specieData, id }: SpecieItemProps) {
 
   return (
     <div className={`item-container ${darkTheme ? 'dark-theme' : ''}`}>
-      <NavLink
-        data-testid="item-link"
-        className="no-link-style"
-        to={`/specie/${id}${currentSearch}`}
+      <div
+        role="button"
+        tabIndex={0} // Make the div focusable
+        onClick={() => {
+          // Update the URL with the specie ID as a query parameter
+          router.push(
+            {
+              pathname: '/specie',
+              query: { ...router.query, id },
+            },
+            undefined,
+            { shallow: true },
+          );
+        }}
+        onKeyDown={(event) => {
+          // Check if the Enter key was pressed
+          if (event.key === 'Backspace') {
+            router.push(
+              {
+                pathname: '/specie',
+                query: { ...router.query, id },
+              },
+              undefined,
+              { shallow: true },
+            );
+          }
+        }}
+        className={`btn specie_item ${isActive ? 'active-item' : ''} ${darkTheme ? 'dark-theme' : ''}`}
       >
-        {({ isActive }) => (
-          <div
-            className={`btn specie_item ${isActive ? 'active-item' : ''} ${darkTheme ? 'dark-theme' : ''}`}
-          >
-            <h3>Name: {specieData.name}</h3>
-            <p>Classification: {specieData.classification}</p>
-            <p>Designation: {specieData.designation}</p>
-          </div>
-        )}
-      </NavLink>
+        <h3>Name: {specieData.name}</h3>
+        <p>Classification: {specieData.classification}</p>
+        <p>Designation: {specieData.designation}</p>
+      </div>
       <div>
         <label className="label" htmlFor={`checkbox-${id}`}>
           Select

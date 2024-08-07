@@ -1,17 +1,21 @@
 import { useState } from 'react';
-import SearchPath from './components/SearchPath';
-import ErrorBoundary from './components/ErrorBoundary';
-import SimulatedErrorComponent from './components/SimulatedErrorComponent';
-import FlyoutElement from './components/FlyoutElement';
-import useBodyClass from './components/useBodyClass';
-import ThemeContext from './components/contex/ThemeContext';
+import SearchPath from '../../components/SearchPath';
+import ErrorBoundary from '../../components/ErrorBoundary';
+import SimulatedErrorComponent from '../../components/SimulatedErrorComponent';
+import FlyoutElement from '../../components/FlyoutElement';
+import useBodyClass from '../../components/useBodyClass';
+import ThemeContext from '../../components/contex/ThemeContext';
 
-export default function App() {
+function SpecieListPage() {
+  console.log('!!!!!! SpecieListPage     !!!!!!!');
+
   const [darkTheme, setDarkTheme] = useState(false);
 
   function toggleTheme() {
     setDarkTheme((prevDarkTheme) => !prevDarkTheme);
   }
+
+  // Use the custom hook to apply the class to the body element
   useBodyClass('dark-theme', darkTheme);
 
   return (
@@ -38,3 +42,5 @@ export default function App() {
     </ThemeContext.Provider>
   );
 }
+
+export default SpecieListPage;

@@ -1,8 +1,10 @@
 import { useContext } from 'react';
+import { useRouter } from 'next/router';
 import ThemeContext from './contex/ThemeContext';
 
 export default function ErrorPage() {
   const darkTheme = useContext(ThemeContext);
+  const router = useRouter();
 
   return (
     <div className="error_page">
@@ -11,7 +13,7 @@ export default function ErrorPage() {
       </h1>
       <button
         className={`btn ${darkTheme ? 'dark-theme' : ''}`}
-        onClick={() => window.location.reload()}
+        onClick={() => router.reload()}
         type="button"
       >
         Refresh Page

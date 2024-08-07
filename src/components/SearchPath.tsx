@@ -1,18 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import useLocalStorage from './useLocalStorage';
-import SpeciesList from './SpeciesList';
 import { useGetSpeciesQuery } from '../redux';
+import SpeciesList from './SpeciesList';
 import { addCurrentPageSpecies } from '../redux/currentPageSpeciesSlice';
 import { useAppDispatch } from '../redux/hooks';
 import ThemeContext from './contex/ThemeContext';
+import SpecieCard from './SpecieCard';
 
 export default function SearchPath() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  console.log('!!!!!!!      SEARCH PAGE    !!!!!!');
+
+  const router = useRouter();
+  const { query } = router;
+  const { id } = router.query;
 
   const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(
+    query.page ? parseInt(query.page as string, 10) : 1,
+  );
   const [inputData, setInputData] = useState(searchTerm);
 
   const darkTheme = useContext(ThemeContext);
@@ -43,10 +49,20 @@ export default function SearchPath() {
     const trimmedInputData = inputData.trim();
     setPage(1);
     setSearchTerm(trimmedInputData);
-
-    const searchParams = new URLSearchParams(location.search);
-    searchParams.set('search', encodeURIComponent(trimmedInputData));
-    navigate({ pathname: location.pathname, search: searchParams.toString() });
+    // Update the URL with the search term
+    const searchParams = new URLSearchParams();
+    if (trimmedInputData) {
+      searchParams.set('search', trimmedInputData);
+    }
+    // Push the updated search term to the URL query string
+    router.push(
+      {
+        pathname: router.pathname,
+        query: searchParams.toString(),
+      },
+      undefined,
+      { shallow: true },
+    );
   };
 
   if (isLoading || isFetching) {
@@ -103,10 +119,7 @@ export default function SearchPath() {
             </button>
           </div>
         </div>
-
-        <div className="container-card">
-          <Outlet />
-        </div>
+        <div className="container-card">{id && <SpecieCard />}</div>
       </div>
     </div>
   );

@@ -1,14 +1,17 @@
 import { useContext } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useGetOneSpecieQuery } from '../redux';
 import ThemeContext from './contex/ThemeContext';
 
 export default function SpecieCard() {
-  const { id } = useParams<{ id: string }>();
-  const location = useLocation();
-  const currentSearch = location.search;
+  console.log(' specieData      ------- SpecieCard-------      ');
+
+  const router = useRouter();
+  const { id, ...restQuery } = router.query;
 
   const darkTheme = useContext(ThemeContext);
+
+  console.log('darkTheme', darkTheme);
 
   // add redux query
   const {
@@ -16,7 +19,17 @@ export default function SpecieCard() {
     isLoading,
     isFetching,
     isError,
-  } = useGetOneSpecieQuery(id);
+  } = useGetOneSpecieQuery(id as string);
+
+  const handleClose = () => {
+    router.push(
+      {
+        pathname: '/specie',
+        query: { ...restQuery },
+      },
+      undefined,
+    );
+  };
 
   if (isLoading || isFetching) {
     return (
@@ -29,27 +42,23 @@ export default function SpecieCard() {
     );
   }
 
-  if (isError) {
+  if (isError || !data) {
     return (
       <div className={`specie_card ${darkTheme ? 'dark-theme' : ''}`}>
         <h3>Data not found</h3>
-
-        <Link
-          data-testid="close-card-link"
-          className="no-link-style"
-          to={`/specie/${currentSearch}`}
+        <button
+          type="button"
+          className={`btn closeCardBtn "no-link-style" ${darkTheme ? 'dark-theme' : ''}`}
+          onClick={handleClose}
         >
-          <button type="button" className="btn closeCardBtn">
-            Close card
-          </button>
-        </Link>
+          Close card
+        </button>
       </div>
     );
   }
 
-  const errorElement = () => <h3>Data not found</h3>;
-  const correctElement = () => (
-    <>
+  return (
+    <div className={`specie_card ${darkTheme ? 'dark-theme' : ''}`}>
       <h3>Name: {data?.name}</h3>
       <p>Classification: {data?.classification}</p>
       <p>Designation: {data?.designation}</p>
@@ -59,24 +68,14 @@ export default function SpecieCard() {
       <p>Eye colors: {data?.eye_colors}</p>
       <p>AverageClifespan: {data?.average_lifespan}</p>
       <p>Language: {data?.language}</p>
-    </>
-  );
-
-  return (
-    <div className={`specie_card ${darkTheme ? 'dark-theme' : ''}`}>
-      {isError ? errorElement() : correctElement()}
-      <Link
+      <button
+        type="button"
         data-testid="close-card-link"
-        className="no-link-style"
-        to={`/specie/${currentSearch}`}
+        className={`btn closeCardBtn "no-link-style" ${darkTheme ? 'dark-theme' : ''}`}
+        onClick={handleClose}
       >
-        <button
-          type="button"
-          className={`btn closeCardBtn${darkTheme ? 'dark-theme' : ''}`}
-        >
-          Close card
-        </button>
-      </Link>
+        Close card
+      </button>
     </div>
   );
 }
