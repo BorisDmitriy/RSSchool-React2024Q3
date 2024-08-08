@@ -4,6 +4,8 @@ export interface ResponseSpecies<OneSpecie> {
   previous: string | null;
 
   results: OneSpecie[];
+  // if incorrect data
+  detail?: string;
 }
 export interface OneSpecie {
   name: string;
@@ -22,6 +24,18 @@ export interface OneSpecie {
   edited: string;
   url: string;
 }
+
+export interface DataSpeciesProps {
+  dataSpecies: ResponseSpecies<OneSpecie>;
+}
+export interface DataSpeciesAndIdProps {
+  dataSpecies: ResponseSpecies<OneSpecie>;
+  idData: OneSpecie;
+}
+export interface SpecieCardProps {
+  idData: OneSpecie;
+}
+
 export interface SpecieItemProps {
   specieData: OneSpecie;
   id: string;

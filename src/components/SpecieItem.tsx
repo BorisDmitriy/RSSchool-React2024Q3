@@ -49,14 +49,10 @@ export default function SpecieItem({ specieData, id }: SpecieItemProps) {
         tabIndex={0} // Make the div focusable
         onClick={() => {
           // Update the URL with the specie ID as a query parameter
-          router.push(
-            {
-              pathname: '/specie',
-              query: { ...router.query, id },
-            },
-            undefined,
-            { shallow: true },
-          );
+          router.push({
+            pathname: '/specie',
+            query: { ...router.query, id },
+          });
         }}
         onKeyDown={(event) => {
           // Check if the Enter key was pressed

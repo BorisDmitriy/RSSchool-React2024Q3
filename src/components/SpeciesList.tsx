@@ -1,15 +1,21 @@
 import { useContext } from 'react';
-import { OneSpecie } from '../types/Types';
+import { DataSpeciesProps, OneSpecie } from '../types/Types';
 import SpecieItem from './SpecieItem';
-import { useAppSelector } from '../redux/hooks';
 import ThemeContext from './contex/ThemeContext';
 
-export default function SpeciesList() {
-  const currentPageData = useAppSelector(
-    (state) => state.currentPageSpecies.list,
-  );
-
+export default function SpeciesList({ dataSpecies }: DataSpeciesProps) {
   const darkTheme = useContext(ThemeContext);
+  console.log('currentPageData!!!', dataSpecies);
+
+  if (dataSpecies === undefined || dataSpecies.detail) {
+    return (
+      <div>
+        <p>data not found!</p>
+      </div>
+    );
+  }
+
+  const currentPageData = dataSpecies.results;
 
   if (currentPageData.length === 0) {
     return (

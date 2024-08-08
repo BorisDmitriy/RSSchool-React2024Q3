@@ -1,43 +1,30 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
+import { DataSpeciesAndIdProps } from 'src/types/Types';
 import useLocalStorage from './useLocalStorage';
-import { useGetSpeciesQuery } from '../redux';
 import SpeciesList from './SpeciesList';
-import { addCurrentPageSpecies } from '../redux/currentPageSpeciesSlice';
-import { useAppDispatch } from '../redux/hooks';
 import ThemeContext from './contex/ThemeContext';
 import SpecieCard from './SpecieCard';
 
-export default function SearchPath() {
+export default function SearchPath({
+  dataSpecies,
+  idData,
+}: DataSpeciesAndIdProps) {
   console.log('!!!!!!!      SEARCH PAGE    !!!!!!');
+  console.log('dataSpecies and id', dataSpecies, idData);
 
   const router = useRouter();
   const { query } = router;
+  console.log(query);
+
   const { id } = router.query;
 
   const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
-  const [page, setPage] = useState(
-    query.page ? parseInt(query.page as string, 10) : 1,
-  );
+  const [page, setPage] = useState(router.query.page || 1);
+  console.log('page', page);
   const [inputData, setInputData] = useState(searchTerm);
 
   const darkTheme = useContext(ThemeContext);
-
-  // add redux
-  const {
-    data = [],
-    isError,
-    isLoading,
-    isFetching,
-  } = useGetSpeciesQuery({ page, searchTerm });
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (!isFetching) {
-      dispatch(addCurrentPageSpecies(data));
-    }
-  }, [data, dispatch, isFetching]);
 
   const handleSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -49,34 +36,33 @@ export default function SearchPath() {
     const trimmedInputData = inputData.trim();
     setPage(1);
     setSearchTerm(trimmedInputData);
-    // Update the URL with the search term
-    const searchParams = new URLSearchParams();
-    if (trimmedInputData) {
-      searchParams.set('search', trimmedInputData);
-    }
+    console.log('[age search', page);
+
     // Push the updated search term to the URL query string
-    router.push(
-      {
-        pathname: router.pathname,
-        query: searchParams.toString(),
-      },
-      undefined,
-      { shallow: true },
-    );
+    router.push({
+      pathname: '/specie/',
+      query: { search: trimmedInputData, id, page: 1 },
+    });
   };
 
-  if (isLoading || isFetching) {
-    return (
-      <div className="loader-wrapper">
-        <div className={`loader ${darkTheme ? 'dark-theme' : ''}`} />
-      </div>
-    );
-  }
+  const handlePageChange = (isPlus: boolean) => {
+    let nextPage = +page;
 
-  if (isError) {
-    console.error('error');
-    throw new Error('Error!!!');
-  }
+    if (isPlus) {
+      nextPage += 1;
+    } else {
+      nextPage -= 1;
+    }
+
+    // Update the page state
+    setPage(nextPage);
+
+    // Push the updated page to the URL query string
+    router.push({
+      pathname: '/specie/',
+      query: { search: searchTerm, id, page: nextPage },
+    });
+  };
 
   return (
     <div className="search-container">
@@ -98,13 +84,13 @@ export default function SearchPath() {
 
       <div className="container">
         <div className="container-list">
-          <SpeciesList />
+          <SpeciesList dataSpecies={dataSpecies} />
           <div className="container-pageBtns">
             <button
               type="button"
               className={`btn ${darkTheme ? 'dark-theme' : ''}`}
-              disabled={data.previous === null}
-              onClick={() => setPage((prevPage) => prevPage - 1)}
+              disabled={!dataSpecies || dataSpecies.previous === null}
+              onClick={() => handlePageChange(false)}
             >
               previous
             </button>
@@ -112,14 +98,16 @@ export default function SearchPath() {
             <button
               type="button"
               className={`btn ${darkTheme ? 'dark-theme' : ''}`}
-              disabled={data.next === null}
-              onClick={() => setPage((prevPage) => prevPage + 1)}
+              disabled={!dataSpecies || dataSpecies.next === null}
+              onClick={() => handlePageChange(true)}
             >
               next
             </button>
           </div>
         </div>
-        <div className="container-card">{id && <SpecieCard />}</div>
+        <div className="container-card">
+          {idData && <SpecieCard idData={idData} />}
+        </div>
       </div>
     </div>
   );
