@@ -5,6 +5,7 @@ import useLocalStorage from './useLocalStorage';
 import SpeciesList from './SpeciesList';
 import ThemeContext from './contex/ThemeContext';
 import SpecieCard from './SpecieCard';
+import createUrlQueryString from './createUrlQueryString';
 
 export default function SearchPath({
   dataSpecies,
@@ -16,19 +17,9 @@ export default function SearchPath({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const createQueryString = useCallback(
-    (names: string[], values: string[]) => {
-      const params = new URLSearchParams(searchParams?.toString());
-
-      names.forEach((name, index) => {
-        const value = values[index];
-        if (name && value !== undefined) {
-          params.set(name, value);
-        }
-      });
-
-      return params.toString();
-    },
+  const queryString = useCallback(
+    (names: string[], values: string[]) =>
+      createUrlQueryString(names, values, searchParams),
     [searchParams],
   );
 
@@ -54,7 +45,7 @@ export default function SearchPath({
 
     // Push the updated search term to the URL query string
     router.push(
-      `${pathname}?${createQueryString(['search', 'id', 'page'], [trimmedInputData || '', id || '', page])}`,
+      `${pathname}?${queryString(['search', 'id', 'page'], [trimmedInputData || '', id || '', page])}`,
     );
   };
 
@@ -72,7 +63,7 @@ export default function SearchPath({
 
     // Push the updated page to the URL query string
     router.push(
-      `${pathname}?${createQueryString(['search', 'id', 'page'], [searchTerm, id, nextPage])}`,
+      `${pathname}?${queryString(['search', 'id', 'page'], [searchTerm, id, nextPage])}`,
     );
   };
 

@@ -4,25 +4,16 @@ import { SpecieItemProps } from '../types/Types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { addSpecie, removeSpecie } from '../redux/selectedItemsSpeciesSlice';
 import ThemeContext from './contex/ThemeContext';
+import createUrlQueryString from './createUrlQueryString';
 
 export default function SpecieItem({ specieData, id }: SpecieItemProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const createQueryString = useCallback(
-    (names: string[], values: string[]) => {
-      const params = new URLSearchParams(searchParams?.toString());
-
-      names.forEach((name, index) => {
-        const value = values[index];
-        if (name && value !== undefined) {
-          params.set(name, value);
-        }
-      });
-
-      return params.toString();
-    },
+  const queryString = useCallback(
+    (names: string[], values: string[]) =>
+      createUrlQueryString(names, values, searchParams),
     [searchParams],
   );
 
@@ -61,20 +52,23 @@ export default function SpecieItem({ specieData, id }: SpecieItemProps) {
   }
 
   return (
-    <div className={`item-container ${darkTheme ? 'dark-theme' : ''}`}>
+    <div
+      data-testid="specie-item"
+      className={`item-container ${darkTheme ? 'dark-theme' : ''}`}
+    >
       <div
         role="button"
         tabIndex={0} // Make the div focusable
         onClick={() => {
           router.push(
-            `${pathname}?${createQueryString(['search', 'id', 'page'], [searchParams?.get('search') || '', id, searchParams?.get('page') || '1'])}`,
+            `${pathname}?${queryString(['search', 'id', 'page'], [searchParams?.get('search') || '', id, searchParams?.get('page') || '1'])}`,
           );
         }}
         onKeyDown={(event) => {
           // Check if the Backspace key was pressed
           if (event.key === 'Backspace') {
             router.push(
-              `${pathname}?${createQueryString(['search', 'id', 'page'], [searchParams?.get('search') || '', id, searchParams?.get('page') || '1'])}`,
+              `${pathname}?${queryString(['search', 'id', 'page'], [searchParams?.get('search') || '', id, searchParams?.get('page') || '1'])}`,
             );
           }
         }}

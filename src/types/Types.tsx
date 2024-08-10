@@ -23,6 +23,8 @@ export interface OneSpecie {
   created: string;
   edited: string;
   url: string;
+
+  detail?: string;
 }
 
 export interface DataSpeciesProps {

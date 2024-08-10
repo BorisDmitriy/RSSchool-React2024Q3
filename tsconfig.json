@@ -18,7 +18,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "composite": false,
+    "composite": true,
     "useDefineForClassFields": false,
     "baseUrl": ".",
     "plugins": [
@@ -42,6 +42,9 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/redux/index.ts",
     "./dist/types/**/*.ts"
   ],
   "exclude": [

@@ -5,6 +5,7 @@ import ThemeContext from './contex/ThemeContext';
 
 export default function SpecieCard({ idData }: SpecieCardProps) {
   console.log('    ------- SpecieCard-------      ');
+  console.log(idData);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -34,7 +35,7 @@ export default function SpecieCard({ idData }: SpecieCardProps) {
     );
   };
 
-  if (!idData) {
+  if (idData.detail) {
     return (
       <div className={`specie_card ${darkTheme ? 'dark-theme' : ''}`}>
         <h3>Data not found</h3>
