@@ -5,7 +5,7 @@ import ThemeContext from './contex/ThemeContext';
 
 export default function SpeciesList({ dataSpecies }: DataSpeciesProps) {
   const darkTheme = useContext(ThemeContext);
-  console.log('currentPageData!!!', dataSpecies);
+  console.log('SpeciesList!!!');
 
   if (dataSpecies === undefined || dataSpecies.detail) {
     return (

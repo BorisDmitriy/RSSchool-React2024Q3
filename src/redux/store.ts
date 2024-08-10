@@ -1,3 +1,5 @@
+'use client';
+
 import { configureStore } from '@reduxjs/toolkit';
 import { speciesAPI } from './speciesAPI';
 import currentPageSpeciesSlice from './currentPageSpeciesSlice';

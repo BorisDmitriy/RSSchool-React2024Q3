@@ -1,23 +1,37 @@
-import { useContext } from 'react';
-import { useRouter } from 'next/router';
+import { useCallback, useContext } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { SpecieCardProps } from 'src/types/Types';
 import ThemeContext from './contex/ThemeContext';
 
 export default function SpecieCard({ idData }: SpecieCardProps) {
-  console.log(' specieData      ------- SpecieCard-------      ');
+  console.log('    ------- SpecieCard-------      ');
 
   const router = useRouter();
-  const { id, ...restQuery } = router.query;
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const createQueryString = useCallback(
+    (names: string[], values: string[]) => {
+      const params = new URLSearchParams(searchParams?.toString());
+
+      names.forEach((name, index) => {
+        const value = values[index];
+        if (name && value !== undefined) {
+          params.set(name, value);
+        }
+      });
+
+      return params.toString();
+    },
+    [searchParams],
+  );
 
   const darkTheme = useContext(ThemeContext);
 
-  console.log('darkTheme', darkTheme);
-
   const handleClose = () => {
-    router.push({
-      pathname: '/specie',
-      query: { id: '', ...restQuery },
-    });
+    router.push(
+      `${pathname}?${createQueryString(['search', 'id', 'page'], [searchParams?.get('search') || '', '', searchParams?.get('page') || '1'])}`,
+    );
   };
 
   if (!idData) {

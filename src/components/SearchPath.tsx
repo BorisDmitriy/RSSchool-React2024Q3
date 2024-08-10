@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { useRouter } from 'next/router';
+import React, { useCallback, useContext, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { DataSpeciesAndIdProps } from 'src/types/Types';
 import useLocalStorage from './useLocalStorage';
 import SpeciesList from './SpeciesList';
@@ -10,17 +10,32 @@ export default function SearchPath({
   dataSpecies,
   idData,
 }: DataSpeciesAndIdProps) {
-  console.log('!!!!!!!      SEARCH PAGE    !!!!!!');
-  console.log('dataSpecies and id', dataSpecies, idData);
+  console.log('!!!!!!!      SearchPath    !!!!!!');
 
   const router = useRouter();
-  const { query } = router;
-  console.log(query);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const { id } = router.query;
+  const createQueryString = useCallback(
+    (names: string[], values: string[]) => {
+      const params = new URLSearchParams(searchParams?.toString());
+
+      names.forEach((name, index) => {
+        const value = values[index];
+        if (name && value !== undefined) {
+          params.set(name, value);
+        }
+      });
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  const id = searchParams?.get('id');
 
   const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
-  const [page, setPage] = useState(router.query.page || 1);
+  const [page, setPage] = useState(searchParams?.get('page') || 1);
   console.log('page', page);
   const [inputData, setInputData] = useState(searchTerm);
 
@@ -36,13 +51,11 @@ export default function SearchPath({
     const trimmedInputData = inputData.trim();
     setPage(1);
     setSearchTerm(trimmedInputData);
-    console.log('[age search', page);
 
     // Push the updated search term to the URL query string
-    router.push({
-      pathname: '/specie/',
-      query: { search: trimmedInputData, id, page: 1 },
-    });
+    router.push(
+      `${pathname}?${createQueryString(['search', 'id', 'page'], [trimmedInputData || '', id || '', page])}`,
+    );
   };
 
   const handlePageChange = (isPlus: boolean) => {
@@ -58,10 +71,9 @@ export default function SearchPath({
     setPage(nextPage);
 
     // Push the updated page to the URL query string
-    router.push({
-      pathname: '/specie/',
-      query: { search: searchTerm, id, page: nextPage },
-    });
+    router.push(
+      `${pathname}?${createQueryString(['search', 'id', 'page'], [searchTerm, id, nextPage])}`,
+    );
   };
 
   return (
@@ -89,7 +101,10 @@ export default function SearchPath({
             <button
               type="button"
               className={`btn ${darkTheme ? 'dark-theme' : ''}`}
-              disabled={!dataSpecies || dataSpecies.previous === null}
+              disabled={
+                dataSpecies.previous === null ||
+                dataSpecies.detail !== undefined
+              }
               onClick={() => handlePageChange(false)}
             >
               previous
@@ -98,7 +113,9 @@ export default function SearchPath({
             <button
               type="button"
               className={`btn ${darkTheme ? 'dark-theme' : ''}`}
-              disabled={!dataSpecies || dataSpecies.next === null}
+              disabled={
+                dataSpecies.next === null || dataSpecies.detail !== undefined
+              }
               onClick={() => handlePageChange(true)}
             >
               next
