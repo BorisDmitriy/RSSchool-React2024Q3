@@ -43,7 +43,10 @@ export default function SpecieItem({ specieData, id }: SpecieItemProps) {
   }
 
   return (
-    <div className={`item-container ${darkTheme ? 'dark-theme' : ''}`}>
+    <div
+      data-testid="specie-item"
+      className={`item-container ${darkTheme ? 'dark-theme' : ''}`}
+    >
       <div
         role="button"
         tabIndex={0} // Make the div focusable

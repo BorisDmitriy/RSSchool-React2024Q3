@@ -1,134 +1,73 @@
-import { render } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
-import { configureStore } from '@reduxjs/toolkit';
+import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { OneSpecie } from '../types/Types';
-import SpeciesList from '../components/SpeciesList';
+import { useRouter } from 'next/router';
+import store from '../redux/store';
 import ThemeContext from '../components/contex/ThemeContext';
-import currentPageSpeciesSlice, {
-  addCurrentPageSpecies,
-} from '../redux/currentPageSpeciesSlice';
-import selectedItemsSpeciesSlice from '../redux/selectedItemsSpeciesSlice';
+import SpeciesList from '../components/SpeciesList';
 
-const store = configureStore({
-  reducer: {
-    currentPageSpecies: currentPageSpeciesSlice,
-    selectedItemsSpecies: selectedItemsSpeciesSlice,
-  },
-});
-
-const mockCurrentPageData: OneSpecie[] = [
-  {
-    name: 'Specie 1',
-    url: 'http://example.com/species/1/',
-    classification: '',
-    designation: '',
-    average_height: '',
-    skin_colors: '',
-    hair_colors: '',
-    eye_colors: '',
-    average_lifespan: '',
-    homeworld: '',
-    language: '',
-    people: [],
-    films: [],
-    created: '',
-    edited: '',
-  },
-  {
-    name: 'Specie 2',
-    url: 'http://example.com/species/2/',
-    classification: '',
-    designation: '',
-    average_height: '',
-    skin_colors: '',
-    hair_colors: '',
-    eye_colors: '',
-    average_lifespan: '',
-    homeworld: '',
-    language: '',
-    people: [],
-    films: [],
-    created: '',
-    edited: '',
-  },
-  {
-    name: 'Specie 3',
-    url: 'http://example.com/species/3/',
-    classification: '',
-    designation: '',
-    average_height: '',
-    skin_colors: '',
-    hair_colors: '',
-    eye_colors: '',
-    average_lifespan: '',
-    homeworld: '',
-    language: '',
-    people: [],
-    films: [],
-    created: '',
-    edited: '',
-  },
-];
-
-store.dispatch(
-  addCurrentPageSpecies({
-    results: mockCurrentPageData,
-    count: 10,
-    next: 'next url',
-    previous: null,
-  }),
-);
-
-const renderWithProviders = (
-  component: React.ReactElement,
-  { darkTheme = false } = {},
-) =>
-  render(
-    <Provider store={store}>
-      <MemoryRouter>
-        <ThemeContext.Provider value={darkTheme}>
-          {component}
-        </ThemeContext.Provider>
-      </MemoryRouter>
-    </Provider>,
-  );
+// Mocking Next.js router functions
+jest.mock('next/router', () => ({
+  useRouter: jest.fn().mockImplementation(() => ({
+    push: jest.fn(),
+    query: {}, // Ensure there is a default query object
+  })),
+}));
 
 describe('SpeciesList', () => {
-  it('renders correctly with theme', () => {
-    const { container } = renderWithProviders(<SpeciesList />, {
-      darkTheme: true,
+  const mockDataSpecies = {
+    count: 1,
+    next: null,
+    previous: null,
+    results: [
+      {
+        name: 'Human',
+        classification: 'Mammal',
+        designation: 'Sentient',
+        average_height: '180',
+        skin_colors: 'caucasian, black, asian, hispanic',
+        hair_colors: 'blonde, brown, black, red',
+        eye_colors: 'brown, blue, green, hazel',
+        average_lifespan: '120',
+        homeworld: 'Earth',
+        language: 'English',
+        people: ['/people/1', '/people/2'],
+        films: ['/films/1', '/films/2'],
+        created: '2014-12-10T16:44:31.486000Z',
+        edited: '2014-12-20T21:36:42.142000Z',
+        url: '/species/1',
+      },
+    ],
+  };
+
+  it('renders a list of SpecieItem components', () => {
+    (useRouter as jest.Mock).mockReturnValue({
+      push: jest.fn(),
+      query: { id: '1' }, // Simulate a specific query parameter
     });
-    expect(container.firstChild).toHaveClass('dark-theme');
+    const { getAllByTestId } = render(
+      <Provider store={store}>
+        <ThemeContext.Provider value={false}>
+          <SpeciesList dataSpecies={mockDataSpecies} />
+        </ThemeContext.Provider>
+      </Provider>,
+    );
+
+    // Assuming SpecieItem has a data-testid="specie-item"
+    expect(getAllByTestId('specie-item').length).toBe(
+      mockDataSpecies.results.length,
+    );
   });
 
-  it('displays message when no data is found', () => {
-    // Dispatch an action to clear the list
-    store.dispatch(
-      addCurrentPageSpecies({
-        results: [],
-        count: 0,
-        next: null,
-        previous: null,
-      }),
+  it('should display "data not found" when results array is empty', () => {
+    const { getByText } = render(
+      <Provider store={store}>
+        <ThemeContext.Provider value={false}>
+          <SpeciesList dataSpecies={{ ...mockDataSpecies, results: [] }} />
+        </ThemeContext.Provider>
+      </Provider>,
     );
-    const { getByText } = renderWithProviders(<SpeciesList />);
-    expect(getByText(/data not found/i)).toBeInTheDocument();
-  });
 
-  it('renders SpecieItem components for each specie in the data', () => {
-    // Reset the preloaded state to have the mock data
-    store.dispatch(
-      addCurrentPageSpecies({
-        results: mockCurrentPageData,
-        count: 10,
-        next: null,
-        previous: null,
-      }),
-    );
-    const { getAllByTestId } = renderWithProviders(<SpeciesList />);
-    const specieItems = getAllByTestId('item-link');
-    expect(specieItems.length).toBe(mockCurrentPageData.length);
+    expect(getByText('data not found')).toBeInTheDocument();
   });
 });

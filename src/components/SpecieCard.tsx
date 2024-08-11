@@ -20,7 +20,7 @@ export default function SpecieCard({ idData }: SpecieCardProps) {
     });
   };
 
-  if (!idData) {
+  if (idData.detail || !idData) {
     return (
       <div className={`specie_card ${darkTheme ? 'dark-theme' : ''}`}>
         <h3>Data not found</h3>

@@ -2,6 +2,14 @@ import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ErrorBoundary from '../components/ErrorBoundary';
 
+// Mock useRouter hook
+const mockRouterPush = jest.fn();
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    push: mockRouterPush,
+  }),
+}));
+
 const ProblematicChild = () => {
   throw new Error('Test error');
 };
