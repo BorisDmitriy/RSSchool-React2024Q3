@@ -1,81 +1,51 @@
 import { useContext } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
-import { useGetOneSpecieQuery } from '../redux';
+import { Link, useSearchParams } from '@remix-run/react';
 import ThemeContext from './contex/ThemeContext';
+import { SpecieCardProps } from '../types/Types';
 
-export default function SpecieCard() {
-  const { id } = useParams<{ id: string }>();
-  const location = useLocation();
-  const currentSearch = location.search;
+export default function SpecieCard({ idData }: SpecieCardProps) {
+  const [searchParams] = useSearchParams();
 
   const darkTheme = useContext(ThemeContext);
 
-  // add redux query
-  const {
-    data = [],
-    isLoading,
-    isFetching,
-    isError,
-  } = useGetOneSpecieQuery(id);
+  // Create a new URLSearchParams object with the updated parameters
+  const updatedSearchParams = new URLSearchParams(searchParams);
+  updatedSearchParams.set('id', ''); // Clear the 'id' parameter
 
-  if (isLoading || isFetching) {
-    return (
-      <div className="loader-wrapper">
-        <div
-          className={`loader ${darkTheme ? 'dark-theme' : ''}`}
-          data-testid="card-loader"
-        />
-      </div>
-    );
-  }
+  // Construct the close link URL with the updated search parameters
+  const closeLinkUrl = `?${updatedSearchParams.toString()}`;
 
-  if (isError) {
+  if (idData.detail) {
     return (
       <div className={`specie_card ${darkTheme ? 'dark-theme' : ''}`}>
         <h3>Data not found</h3>
-
         <Link
-          data-testid="close-card-link"
-          className="no-link-style"
-          to={`/specie/${currentSearch}`}
+          to={closeLinkUrl}
+          className={`btn closeCardBtn "no-link-style" ${darkTheme ? 'dark-theme' : ''}`}
         >
-          <button type="button" className="btn closeCardBtn">
-            Close card
-          </button>
+          Close card
         </Link>
       </div>
     );
   }
 
-  const errorElement = () => <h3>Data not found</h3>;
-  const correctElement = () => (
-    <>
-      <h3>Name: {data?.name}</h3>
-      <p>Classification: {data?.classification}</p>
-      <p>Designation: {data?.designation}</p>
-      <p>Average height: {data?.average_height}</p>
-      <p>Skin colors: {data?.skin_colors}</p>
-      <p>Hair colors: {data?.hair_colors}</p>
-      <p>Eye colors: {data?.eye_colors}</p>
-      <p>AverageClifespan: {data?.average_lifespan}</p>
-      <p>Language: {data?.language}</p>
-    </>
-  );
-
   return (
     <div className={`specie_card ${darkTheme ? 'dark-theme' : ''}`}>
-      {isError ? errorElement() : correctElement()}
+      <h3>Name: {idData?.name}</h3>
+      <p>Classification: {idData?.classification}</p>
+      <p>Designation: {idData?.designation}</p>
+      <p>Average height: {idData?.average_height}</p>
+      <p>Skin colors: {idData?.skin_colors}</p>
+      <p>Hair colors: {idData?.hair_colors}</p>
+      <p>Eye colors: {idData?.eye_colors}</p>
+      <p>AverageClifespan: {idData?.average_lifespan}</p>
+      <p>Language: {idData?.language}</p>
       <Link
+        to={closeLinkUrl}
         data-testid="close-card-link"
-        className="no-link-style"
-        to={`/specie/${currentSearch}`}
+        className={`btn closeCardBtn "no-link-style" ${darkTheme ? 'dark-theme' : ''}`}
       >
-        <button
-          type="button"
-          className={`btn closeCardBtn${darkTheme ? 'dark-theme' : ''}`}
-        >
-          Close card
-        </button>
+        Close card
       </Link>
     </div>
   );

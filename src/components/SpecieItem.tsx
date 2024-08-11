@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, useSearchParams } from '@remix-run/react';
 import { useContext, useEffect, useState } from 'react';
 import { SpecieItemProps } from '../types/Types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -6,16 +6,16 @@ import { addSpecie, removeSpecie } from '../redux/selectedItemsSpeciesSlice';
 import ThemeContext from './contex/ThemeContext';
 
 export default function SpecieItem({ specieData, id }: SpecieItemProps) {
-  const location = useLocation();
-  const currentSearch = location.search;
-
-  const selectedItemsData = useAppSelector(
-    (state) => state.selectedItemsSpecies.list,
-  );
+  const [searchParams] = useSearchParams();
+  const isActive = searchParams.get('id') === id;
 
   const dispatch = useAppDispatch();
 
   const darkTheme = useContext(ThemeContext);
+
+  const selectedItemsData = useAppSelector(
+    (state) => state.selectedItemsSpecies.list,
+  );
 
   const isSelected = selectedItemsData.some(
     (selectedSpecie) => selectedSpecie.name === specieData.name,
@@ -41,23 +41,24 @@ export default function SpecieItem({ specieData, id }: SpecieItemProps) {
     setChecked(!checked);
   }
 
+  // Construct the link URL with the updated search parameters
+  const itemLinkUrl = new URLSearchParams(searchParams);
+  itemLinkUrl.set('id', id || '');
+  const linkUrl = `?${itemLinkUrl.toString()}`;
+
   return (
-    <div className={`item-container ${darkTheme ? 'dark-theme' : ''}`}>
-      <NavLink
-        data-testid="item-link"
-        className="no-link-style"
-        to={`/specie/${id}${currentSearch}`}
+    <div
+      data-testid="specie-item"
+      className={`item-container ${darkTheme ? 'dark-theme' : ''}`}
+    >
+      <Link
+        to={linkUrl}
+        className={`btn specie_item ${isActive ? 'active-item' : ''} ${darkTheme ? 'dark-theme' : ''}`}
       >
-        {({ isActive }) => (
-          <div
-            className={`btn specie_item ${isActive ? 'active-item' : ''} ${darkTheme ? 'dark-theme' : ''}`}
-          >
-            <h3>Name: {specieData.name}</h3>
-            <p>Classification: {specieData.classification}</p>
-            <p>Designation: {specieData.designation}</p>
-          </div>
-        )}
-      </NavLink>
+        <h3>Name: {specieData.name}</h3>
+        <p>Classification: {specieData.classification}</p>
+        <p>Designation: {specieData.designation}</p>
+      </Link>
       <div>
         <label className="label" htmlFor={`checkbox-${id}`}>
           Select

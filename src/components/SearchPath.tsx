@@ -1,66 +1,53 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { useSearchParams } from '@remix-run/react';
 import useLocalStorage from './useLocalStorage';
 import SpeciesList from './SpeciesList';
-import { useGetSpeciesQuery } from '../redux';
-import { addCurrentPageSpecies } from '../redux/currentPageSpeciesSlice';
-import { useAppDispatch } from '../redux/hooks';
 import ThemeContext from './contex/ThemeContext';
+import { DataSpeciesAndIdProps } from '../types/Types';
+import SpecieCard from './SpecieCard';
 
-export default function SearchPath() {
-  const navigate = useNavigate();
-  const location = useLocation();
+export default function SearchPath({
+  dataSpecies,
+  idData,
+}: DataSpeciesAndIdProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
-  const [page, setPage] = useState(1);
+  const currentPage = searchParams.get('page') || '1';
   const [inputData, setInputData] = useState(searchTerm);
 
   const darkTheme = useContext(ThemeContext);
 
-  // add redux
-  const {
-    data = [],
-    isError,
-    isLoading,
-    isFetching,
-  } = useGetSpeciesQuery({ page, searchTerm });
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (!isFetching) {
-      dispatch(addCurrentPageSpecies(data));
-    }
-  }, [data, dispatch, isFetching]);
-
   const handleSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    console.log('sss');
+
     setInputData(event.target.value);
   };
 
   const handleSearch = () => {
-    const trimmedInputData = inputData.trim();
-    setPage(1);
-    setSearchTerm(trimmedInputData);
+    console.log('afs');
 
-    const searchParams = new URLSearchParams(location.search);
-    searchParams.set('search', encodeURIComponent(trimmedInputData));
-    navigate({ pathname: location.pathname, search: searchParams.toString() });
+    const trimmedInputData = inputData.trim();
+    setSearchTerm(trimmedInputData); // Save the search term in local storage
+
+    // Update the search parameters with the trimmed input data and reset the page number
+    const newSearchParams = new URLSearchParams();
+    newSearchParams.set('search', trimmedInputData);
+    newSearchParams.set('page', '1'); // Reset page to 1 on new search
+    setSearchParams(newSearchParams); // Pass the entire newSearchParams object
+
+    console.log('Search query added:', trimmedInputData);
   };
 
-  if (isLoading || isFetching) {
-    return (
-      <div className="loader-wrapper">
-        <div className={`loader ${darkTheme ? 'dark-theme' : ''}`} />
-      </div>
-    );
-  }
-
-  if (isError) {
-    console.error('error');
-    throw new Error('Error!!!');
-  }
+  // Function to change the page query parameter
+  const changePage = (newPage: number) => {
+    // Update the search parameters with the new page number
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set('page', newPage.toString());
+    setSearchParams(newSearchParams);
+  };
 
   return (
     <div className="search-container">
@@ -82,30 +69,29 @@ export default function SearchPath() {
 
       <div className="container">
         <div className="container-list">
-          <SpeciesList />
+          <SpeciesList dataSpecies={dataSpecies} />
           <div className="container-pageBtns">
             <button
               type="button"
               className={`btn ${darkTheme ? 'dark-theme' : ''}`}
-              disabled={data.previous === null}
-              onClick={() => setPage((prevPage) => prevPage - 1)}
+              disabled={+currentPage <= 1}
+              onClick={() => changePage(+currentPage - 1)}
             >
-              previous
+              Previous
             </button>
-            <span className="page-span">{page}</span>
+            <span className="page-span">{currentPage}</span>
             <button
               type="button"
               className={`btn ${darkTheme ? 'dark-theme' : ''}`}
-              disabled={data.next === null}
-              onClick={() => setPage((prevPage) => prevPage + 1)}
+              disabled={!dataSpecies.next}
+              onClick={() => changePage(+currentPage + 1)}
             >
-              next
+              Next
             </button>
           </div>
         </div>
-
         <div className="container-card">
-          <Outlet />
+          {idData && <SpecieCard idData={idData} />}
         </div>
       </div>
     </div>

@@ -5,8 +5,9 @@ import SimulatedErrorComponent from './components/SimulatedErrorComponent';
 import FlyoutElement from './components/FlyoutElement';
 import useBodyClass from './components/useBodyClass';
 import ThemeContext from './components/contex/ThemeContext';
+import { DataSpeciesAndIdProps } from './types/Types';
 
-export default function App() {
+export default function App({ dataSpecies, idData }: DataSpeciesAndIdProps) {
   const [darkTheme, setDarkTheme] = useState(false);
 
   function toggleTheme() {
@@ -31,7 +32,7 @@ export default function App() {
               Change theme
             </button>
           </div>
-          <SearchPath />
+          <SearchPath dataSpecies={dataSpecies} idData={idData} />
           <FlyoutElement />
         </div>
       </ErrorBoundary>
